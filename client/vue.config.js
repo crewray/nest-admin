@@ -43,6 +43,7 @@ module.exports = {
   assetsDir: 'static',
   productionSourceMap: false,
   transpileDependencies: true,
+  lintOnSave:false,
   devServer: {
     host: '0.0.0.0',
     port: 9540,
@@ -52,7 +53,8 @@ module.exports = {
         ws: true,
         changeOrigin: true
       }
-    }
+    },
+
   },
   configureWebpack: {
     resolve: {

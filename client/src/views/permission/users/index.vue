@@ -16,6 +16,7 @@
       </div>
 
       <div class="filter-action-wrapper filter-item">
+        <el-button type="primary" @click="showUserAddEvent">新增</el-button>
         <el-button type="primary" @click="searchEvent">搜索</el-button>
         <el-button type="text" @click="loadingMoreEvent" style="margin-left: 20px;" v-perm="'perm_users:createMultUser'">{{ loadingMore ? '收起' : '更多' }}</el-button>
       </div>
@@ -43,6 +44,8 @@
       </template>
     </k-table>
 
+    <!-- 新增用户 -->
+    <add-user v-model="showUserAdd" :all-roles="allRoles" @change="updateUserSuccess"></add-user>
     <!-- 编辑用户 -->
     <edit-user v-model="showUserEdit" :curr-id="currId" :all-roles="allRoles" @change="updateUserSuccess"></edit-user>
     <!-- 批量导入用户 有报错 -->
@@ -54,6 +57,7 @@
 import { defineComponent, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+import AddUser from './components/Add.vue'
 import EditUser from './components/Edit.vue'
 import UploadErr from './components/UploadErr.vue'
 
@@ -70,7 +74,7 @@ import { getUserList, ICreateOrUpdateUser, QueryUserList, resetPassword, updateS
 import { getRoleList, RoleApiResult } from '@/api/role'
 
 export default defineComponent({
-  components: { EditUser, UploadErr },
+  components: { EditUser, UploadErr, AddUser },
   setup () {
     const hasActionPerm = hasPerm('perm_users:edit') || hasPerm('perm_users:updateStatus') || hasPerm('perm_users:resetPw')
 
@@ -124,8 +128,12 @@ export default defineComponent({
     }
     getAllRoles()
     // 编辑用户相关
+    const showUserAdd = ref<boolean>(false)
     const showUserEdit = ref<boolean>(false)
     const currId = ref<string>()
+    const showUserAddEvent = () => {
+      showUserAdd.value = true
+    }
     const showUserEditEvent = (row: ICreateOrUpdateUser) => {
       currId.value = row.id
       showUserEdit.value = true
@@ -234,6 +242,8 @@ export default defineComponent({
       allRoles,
       // 编辑用户相关
       currId,
+      showUserAdd,
+      showUserAddEvent,
       showUserEdit,
       showUserEditEvent,
       userTableRef,

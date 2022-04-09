@@ -22,6 +22,27 @@ export interface ICreateOrUpdateUser extends UserApiResult {
   roleIds?: number[]
 }
 
+export interface ICreateUser {
+  id?: string
+  /** 创建时间 */
+  createDate?: string | number
+  /** 更新时间 */
+  updateDate?: string | number
+  /** 用户头像 */
+  avatar?: string
+  /** 账号 */
+  account?: string
+  /** 用户手机号 */
+  phoneNum?: string
+  /** 用户邮箱 */
+  email?: string
+  /** 用户状态 1-活动中 0-禁用 */
+  status?: 0 | 1 | string
+  password: string,
+  confirmPassword: string,
+  roleIds: number[]
+}
+
 export interface QueryUserList extends Pagination {
   /** 帐号，手机号，名称 */
   account?: string
@@ -78,6 +99,14 @@ export function getUserList (params: QueryUserList): Promise<ResultData<ListResu
     url: `${config.api.baseUrl}/user/list`,
     method: ApiMethodContants.GET,
     params
+  })
+}
+
+export function createUser (data: ICreateUser): Promise<ResultData<null>> {
+  return http.request<ResultData<null>>({
+    url: `${config.api.baseUrl}/user/create`,
+    method: ApiMethodContants.POST,
+    data
   })
 }
 
